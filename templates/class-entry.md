@@ -1,4 +1,4 @@
-## M<number> — <what today was called>
+## M<number>: <what today was called>
 
 **Today's one idea:** <one or two sentences, in your own words. Not the words that
 were on the board — yours. If you cannot say it in your own words you have just

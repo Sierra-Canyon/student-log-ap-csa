@@ -1,5 +1,5 @@
 #!/bin/bash -e
-# AP Cybersecurity — start a log entry for today.
+# AP Computer Science A — start a log entry for today.
 # Nine lines. Read them; you will be able to follow all of them by October.
 
 # Sync with GitHub. "|| true" means: if the network is down, keep going anyway

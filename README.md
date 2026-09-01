@@ -1,0 +1,390 @@
+# AP Cybersecurity — Work Log
+
+**Period F · 2026–27 · Mr. DeVaughn-Brown · Room U 108**
+
+This repository is your log for the year, and — if you do it properly — it is
+also the only study guide you will need in May.
+
+Three reasons it exists.
+
+1. **You are building your own revision document, four lines at a time.** Every
+   class you write down the day's one idea in your own words, the terms that
+   released, and anything that did not land. In December you run one command and
+   five months of that becomes a single document. Nobody can hand you a better
+   study guide than the one made out of your own confusion.
+2. **I can see where you are.** If you are stuck, I would rather find out on a
+   Tuesday than on a unit test.
+3. **You are keeping an audit log.** In Unit 4 and Unit 5 I am going to hand you
+   somebody else's log and ask you to reconstruct what happened from it. By then
+   you will have spent five months writing one. You will read those files very
+   differently than someone who has not.
+
+
+**The exit ticket is not in here.** That stays on an index card, written in
+class, handed to me at the door. Nothing about the end of the period changes.
+
+---
+
+## Setup
+
+You accepted this assignment through Classroom 50 and it made you a repository.
+Clone it in our `version_control` directory:
+
+```
+mkdir ~/version_control
+cd ~/version_control
+git clone <your-repo-url>
+cd ap-cybersecurity-fall-2026-student-log-<your-username>
+```
+
+> **Everything for this class lives in `~/version_control`.** Not Downloads, not
+> Desktop, not Documents, and never iCloud Drive or Google Drive. Cloud sync and
+> git fight each other, and git loses in ways that are genuinely painful to
+> undo. One folder, every repo, no sync — then you always know where your work
+> is.
+
+If any step below fails, **stop and ask** — do not paste an error into a chatbot
+and run whatever it tells you. That habit is how people destroy repositories,
+and separately, it is the exact habit this course spends a year arguing against.
+
+> **Already did this for another of my classes?** Steps 1 through 4 are global
+> git settings — they are set once per computer, not once per class. Skip to
+> step 5.
+
+### 1. Tell git who you are
+
+```
+git config --global user.name "Your Real Name"
+git config --global user.email "you@sierracanyon.org"
+```
+
+Use your real name. Every commit you make this year is signed with it. That is
+the point of it.
+
+### 2. Your editor
+
+We set up VS Code on the first day. Tell git to use it:
+
+```
+git config --global core.editor "code --wait"
+```
+
+The `--wait` matters. Without it, git opens the file and immediately carries on
+as if you had already saved, so your commit message comes out empty. With it,
+git waits for you to close the tab.
+
+If `code` is "command not found," open VS Code, press `Cmd+Shift+P`, type *Shell
+Command: Install 'code' command in PATH*, and hit enter. Then quit your terminal
+and reopen it — a terminal only learns about new commands when it starts.
+
+### 3. The terminal setup
+
+```
+cd git_files
+cp git-commit-template.txt ~/.git-commit-template.txt
+git config --global commit.template ~/.git-commit-template.txt
+cp git-prompt.sh ~/git-prompt.sh
+cp git-completion.bash ~/git-completion.bash
+cp bash_profile_course ~/.bash_profile
+cd ..
+```
+
+Quit your terminal completely and reopen it. Your prompt should now be in color
+and should show which branch you are on. **That branch name in your prompt is
+not decoration** — it is the thing that stops you committing to the wrong place.
+
+### 4. Two settings that prevent specific miseries
+
+```
+git config --global pull.rebase true
+git config --global diff.colorMoved zebra
+```
+
+Neither of these is cosmetic. Here is what each one is actually stopping.
+
+**`pull.rebase true` — stops your history filling with noise.** When you `git
+pull` and the branch has moved on without you, git's default is to invent a new
+commit whose only job is to glue the two lines of history together. It says
+nothing; you did not write it; and after a few weeks your log is half real work
+and half *"Merge branch 'main' of github.com:…"*. With `pull.rebase true`, git
+instead lifts your commits off, brings the other work down, and sets your
+commits back on top — one straight line, every commit one you actually made.
+This matters here more than in most places, because in Unit 5 you will be handed
+a log and asked to reconstruct what happened from it. A history you can read is
+the entire skill.
+
+**`diff.colorMoved zebra` — stops a moved paragraph looking like a rewrite.** By
+default `git diff` has exactly two colours: red for gone, green for new. Cut ten
+lines from one part of your log and paste them further down and the diff shows
+ten red and ten green — identical to having deleted ten lines and written ten
+different ones. `zebra` gives moved lines their own colours, so *moved* and
+*rewritten* stop looking the same. You want that the first time you reorganise
+an entry and cannot tell what you actually changed.
+
+### 5. Run the entry script
+
+```
+bash scripts/start-entry.sh
+```
+
+`bash <script>` hands the file to bash and asks it to run the lines inside. That
+is why you do not have to make anything executable, and it is the same command
+every time.
+
+A file should appear in `logs/` named for today's date, with a timestamp header,
+and it should open in your editor. If that happened, setup is done.
+
+---
+
+## Branches: one per unit
+
+**You never work on `main`.** You work on a branch, and you get a new one for
+each unit.
+
+Your branch names are your GitHub username plus the unit:
+
+```
+jd12-setup      jd12-unit1      jd12-unit2      jd12-unit3 ...
+```
+
+My GitHub username is `jd12`, so those are mine. Yours use your username.
+
+Start a branch like this:
+
+```
+git checkout main
+git pull
+git checkout -b jd12-unit1
+git push -u origin jd12-unit1
+```
+
+**Hyphens, not slashes.** `jd12-unit1`, never `jd12/unit1`. Git cannot hold a
+branch called `jd12` and a branch called `jd12/unit1` at the same time, and the
+error it gives you when you try is not one you want to meet on a Tuesday.
+
+### The schedule
+
+| Branch | Opens | Merges at | Date |
+|---|---|---|---|
+| `-setup` | Wed 9/2 | end of the first week | **Fri 9/4** |
+| `-unit1` | Tue 9/8 | Unit 1 test | **Wed 9/23** |
+| `-unit2` | after the U1 test | Unit 2 test | **Mon 11/2** |
+| `-unit3` | after the U2 test | Unit 3 test | **Tue 1/12** |
+| `-unit4` | after the U3 test | Unit 4 test | **Thu 2/11** |
+| `-unit5` | after the U4 test | Unit 5 test | **Thu 3/18** |
+
+---
+
+## What goes in the log
+
+### File naming
+
+One file per day, in `logs/`, named for the date:
+
+```
+logs/2026-09-14.log.md
+```
+
+That format sorts correctly when you run `ls`, which is the whole reason for it.
+One file holds every entry you write that day.
+
+### The class entry — after every class
+
+Four lines. **The format matters, because a script reads it later.**
+
+```markdown
+## M14 — Governance: Who Says So
+
+**Today's one idea:** A policy says what must happen, a standard says exactly
+how, and a guideline is only a suggestion. Mixing them up is how a place ends up
+with a rule nobody can actually follow.
+
+**Terms released:** Policy · Standard · Procedure · Guideline · Baseline
+
+**Shaky:** still cannot reliably tell a standard from a baseline
+
+**Did:** Sorted 12 documents into the four buckets. Got 9, argued the AUP one,
+wrong.
+```
+
+Two rules worth taking seriously:
+
+- **"In your own words" is the whole exercise.** If you copy the sentence off
+  the board you have written nothing, because in March you will read it back and
+  it will mean exactly as much as it did when it was on the board. If you
+  *cannot* put it in your own words — that is not a failure. That is the thing
+  that goes on the Shaky line.
+- **Leave the `Shaky:` line in even when it is empty.** It is what the study
+  guide script looks for, and an empty one is a real answer.
+
+**I read the Shaky lines.** I am telling you that in September so it is never a
+surprise. I read them to find out what to teach again, not to judge you for what
+you did not get — and the tool only works if you are honest in it.
+
+### Sign-on / sign-off — when you work outside class
+
+What you set out to do, then what you actually did and one honest word about
+anything you didn't. "No time" is a complete answer. "Got stuck on question 3"
+is a better one, because I can act on it.
+
+### Formatting
+
+1. Markdown. Keep this open in a tab for the first two weeks:
+   [markdownguide.org/cheat-sheet](https://www.markdownguide.org/cheat-sheet/).
+   You need about six things off it — headings, bold, italic, lists, code,
+   links.
+2. Entries run oldest-to-newest down the file, in the order they happened.
+3. Every entry starts with a timestamp header. The script writes it for you.
+4. **Wrap lines at 80 columns.** The Rewrap extension for VS Code does it with
+   one keystroke. This is not fussiness — it is so that `git diff` shows me the
+   sentence you changed instead of the whole paragraph, which matters in Unit 5
+   when you learn what a diff is actually for.
+
+---
+
+## The AI line
+
+Every sign-off entry ends with one line:
+
+```
+**AI use:** none.
+```
+
+or
+
+```
+**AI use:** asked Claude what a subnet mask does; wrote the answer myself.
+```
+
+That is the whole policy. **You are not in trouble for using it** — the log is
+graded on whether you did it, not how good it is, so there is nothing here to
+gain by cheating. You are in trouble for not saying so.
+
+Two reasons this line exists. The narrow one is that I need to know whether the
+confusion in your log is yours, because that is the only thing I can teach to.
+The broad one is that disclosure is the actual professional norm in this field —
+you will spend Unit 1 on responsible disclosure and Unit 5 on incident
+reporting, and both come down to the same idea: **the person who tells you what
+happened is not the problem.**
+
+---
+
+## Committing, and the pull request
+
+Commit every time you write an entry:
+
+```
+git add logs/2026-09-14.log.md
+git commit
+git push
+```
+
+`git commit` with no `-m` opens the template. Keep the top line under 50
+characters and write it as a command: *Add class entry for M14*, not *added
+class entry*.
+
+**Push the same day you write.** A week of entries pushed the night before a
+unit test tells me exactly what it looks like — and unlike an index card, the
+timestamps are not something either of us gets to argue about.
+
+### The pull request
+
+A pull request is you saying *this branch is finished, please look at it before
+it becomes part of the main record.* That is all it is. It is not a test and it
+is not a submission button — it is a request for a reading.
+
+**Open it at the start of the unit**, right after you make the branch, even
+though it is empty. Fill in the description as you go. That way I can watch the
+work arrive instead of meeting all of it at once on test day.
+
+**Merge it at the unit test**, after I have reviewed it. Then make the next
+branch and open the next PR.
+
+### What my review looks like
+
+A comment on your PR with a score out of 12, one thing that worked, and one
+question. **The question is the part that matters.** You do not have to answer
+it in writing — but you should be able to answer it out loud if I ask you in
+class, and sometimes I will.
+
+---
+
+## The payoff: `study-guide.sh`
+
+This is why the four-line format is worth the discipline.
+
+```
+bash scripts/study-guide.sh              everything you have written
+bash scripts/study-guide.sh 2026-10      just October
+bash scripts/study-guide.sh --shaky      only the things you flagged
+```
+
+It writes `study-guide.md` at the top of the repository. That file is
+git-ignored, so rebuilding it never clutters your commits — run it as often as
+you like.
+
+**Use `--shaky` two days before every test.** It gives you a list, in your own
+words, of exactly the things you did not understand at the moment you did not
+understand them. Anything still on that list is your study plan. Anything you
+can now explain out loud, delete from the log — deleting it is the point, and
+git remembers it was there.
+
+Before the December midterm and again before the AP exam on **5 May**, run it
+with no arguments and read the whole thing. It takes about fifteen minutes and
+it is the single highest-value hour of revision available to you, because it is
+made entirely of your own thinking rather than somebody else's summary.
+
+---
+
+## Grading
+
+The log is part of **Practice**, which is 5% of your grade and is scored on
+**completion only — never on quality.** An entry exists or it does not.
+
+- A class entry for **every meeting**, committed before the next one.
+- A sign-on/sign-off pair for **any work you do outside class**. Anki counts.
+- **Your three late passes apply here**, same as everywhere else.
+- Miss more than **six** class entries in a semester and it stops being free —
+  come see me before that happens, not after.
+
+Nothing in here is scored on how smart it sounds. I am not grading the writing.
+I am reading it.
+
+---
+
+## Fixing things
+
+**I committed to `main`.** Nothing is lost.
+
+```
+git branch jd12-unit1          # if the branch doesn't exist yet
+git checkout jd12-unit1
+git merge main
+git checkout main
+git reset --hard origin/main
+git checkout jd12-unit1
+```
+
+**My push was rejected.** Somebody — probably you, on another machine — pushed
+first. `git pull`, then push again.
+
+**I have a merge conflict.** Stop. Screenshot it and post it to Piazza.
+Conflicts are completely routine and completely confusing the first time, and
+you will learn more from three minutes with me than an hour of guessing.
+
+**GitHub is asking for a password and rejecting mine.** GitHub does not accept
+account passwords for git any more. You need a personal access token — see the
+setup card, or ask.
+
+---
+
+## Getting help
+
+Ask me, or post to **Piazza** — that is our class board, and it is the right
+place for anything that is not urgent. Include the **exact** command you ran and
+the **exact** error, as text, not as a description. "It didn't work" cannot be
+helped; a screenshot can.
+
+Answering somebody else's question on Piazza is worth as much as asking a good
+one. It is also the single best predictor I know of who ends up understanding
+this material.

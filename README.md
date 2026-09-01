@@ -3,10 +3,9 @@
 **Period B · 2026–27 · Mr. DeVaughn-Brown · Room U 108**
 
 This repository is your log for the year, and in May it is the reason you can
-write a working method on paper with no IDE, no autocomplete, and nothing
-underlining your mistakes in red. Half that exam is handwritten code. This is
-where you rehearse for it.
----
+write a working method with no IDE, no autocomplete, and nothing
+underlining your mistakes in red.
+
 
 ## Setup
 

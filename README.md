@@ -6,24 +6,6 @@ This repository is your log for the year, and in May it is the reason you can
 write a working method on paper with no IDE, no autocomplete, and nothing
 underlining your mistakes in red. Half that exam is handwritten code. This is
 where you rehearse for it.
-
-Three reasons it exists.
-
-1. **You are building your own revision document, four lines at a time.** Every
-   class you write down the day's one idea in your own words, the terms that
-   released, and anything that did not land. In December you run one command and
-   four months of that becomes a single document. Nobody can hand you a better
-   study guide than the one made out of your own confusion.
-2. **I can see where you are.** If you are stuck, I would rather find out on a
-   Tuesday than on a unit test.
-3. **You are writing the only record of why.** In January I put your own
-   November project back on the screen and ask what it should have been. Ninety
-   lines in one method, three loops that are nearly the same loop: you will see
-   it instantly, and you will not remember why you did it that way. Your log is
-   the only document that says. Everyone finds that uncomfortable once. Nobody
-   who kept a real log finds it uncomfortable twice.
-
-
 ---
 
 ## Setup
@@ -32,7 +14,7 @@ You accepted this assignment through Classroom 50 and it made you a repository.
 Clone it somewhere sane:
 
 ```
-mkdir -p ~/version_control
+mkdir ~/version_control
 cd ~/version_control
 git clone <your-repo-url>
 cd ap-csa-fall-2026-student-log-<your-username>
@@ -180,21 +162,6 @@ git push -u origin jd12-unit1
 branch called `jd12` and a branch called `jd12/unit1` at the same time, and the
 error it gives you when you try is not one you want to meet on a Tuesday.
 
-### The schedule
-
-| Branch | Opens | Merges at | Date |
-|---|---|---|---|
-| `-setup` | Tue 9/1 | end of the first week | **Fri 9/4** |
-| `-unit1` | Thu 9/3 | Unit 1 test | **Tue 10/6** |
-| `-unit2` | Wed 10/7 | Unit 2 test | **Tue 11/17** |
-| `-project` | Wed 11/18 | Text Analyzer demos | **Mon 11/30** |
-| `-midterm` | Wed 12/2 | last meeting of Sem. 1 | **Wed 12/9** |
-| `-unit3` | Mon 1/4 | Unit 3 test | **Thu 1/28** |
-| `-unit4a` | Fri 1/29 | Unit 4A checkpoint | **Tue 2/23** |
-| `-unit4b` | Thu 2/25 | Unit 4 test | **Thu 3/18** |
-| `-review` | after spring break | the AP exam | **Wed 5/12** |
-
----
 
 ## What goes in the log
 
@@ -279,7 +246,7 @@ Every sign-off entry ends with one line:
 or
 
 ```
-**AI use:** asked Claude why 7/2 is 3 and not 3.5; wrote the explanation myself.
+**AI use:** asked ChatGPT why 7/2 is 3 and not 3.5; wrote the explanation myself.
 ```
 
 That is the whole policy. **You are not in trouble for using it.** Your answers

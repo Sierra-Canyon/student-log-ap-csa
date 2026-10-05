@@ -52,8 +52,3 @@ elif command -v nano > /dev/null; then
 else
   echo "Wrote $FILENAME. Open it in your editor."
 fi
-
-echo ""
-echo "Check off what you finished, say in one honest word why anything is not"
-echo "finished, answer all 3 questions, replace the AI line if you used it, then:"
-echo "    git add logs && git commit && git push"

@@ -1,0 +1,96 @@
+#!/bin/bash
+# AP Computer Science A: writes your sign on / sign off commit message for you.
+#
+# Git runs this every time you type `git commit` (no -m). It looks at the log
+# you staged, works out whether it is a sign on or a sign off, asks you one
+# question, and puts the finished message on the first line of the editor.
+# You still get to read it: save, close the tab, and the commit is made.
+#
+# It stays out of the way when:
+#   - you used -m, or this is a merge, an amend, or a squash
+#   - nothing in logs/ is staged, or the change is not a sign on or sign off
+# In those cases you get the normal commit template and write your own message.
+
+MSG_FILE="$1"
+SOURCE="$2"
+
+# "" = plain `git commit`; "template" = plain `git commit` with commit.template set.
+case "$SOURCE" in
+  "" | template) ;;
+  *) exit 0 ;;
+esac
+
+# ------------------------------------------------------------ what was staged
+
+KIND=""      # "sign on", "sign off", or "sign on and sign off"
+DAYFILE=""   # logs/YYYY-MM-DD.log.md the message is about
+
+for f in $(git diff --cached --name-only --diff-filter=AM -- 'logs/*.log.md'); do
+  ADDED=$(git diff --cached -U0 -- "$f" | grep '^+' | grep -v '^+++')
+  HEADERS=$(printf '%s\n' "$ADDED" | grep -cE '^\+# [A-Z][a-z]+day, ')
+  if printf '%s\n' "$ADDED" | grep -q '^+Signing off\.'; then
+    if [ "$HEADERS" -ge 2 ]; then KIND="sign on and sign off"; else KIND="sign off"; fi
+    DAYFILE="$f"
+  elif [ "$HEADERS" -ge 1 ] && [ -z "$KIND" ]; then
+    KIND="sign on"
+    DAYFILE="$f"
+  fi
+done
+
+[ -z "$KIND" ] && exit 0
+
+# ------------------------------------------------------------ the date
+
+# From the file name, not the clock: a sign off for Monday committed after
+# midnight is still Monday's sign off.
+STAMP=$(basename "$DAYFILE" .log.md)          # 2026-10-05
+MONTH_NUM=$((10#$(echo "$STAMP" | cut -d- -f2)))
+DAY=$((10#$(echo "$STAMP" | cut -d- -f3)))
+MONTHS=(x Jan Feb Mar Apr May June July Aug Sept Oct Nov Dec)
+MONTH="${MONTHS[$MONTH_NUM]}"
+
+case "$DAY" in
+  11 | 12 | 13) SUFFIX=th ;;
+  *1) SUFFIX=st ;;
+  *2) SUFFIX=nd ;;
+  *3) SUFFIX=rd ;;
+  *)  SUFFIX=th ;;
+esac
+WHEN="$MONTH $DAY$SUFFIX"                      # Oct 5th
+
+# ------------------------------------------------------------ the question
+
+CODE=""
+if { exec 3</dev/tty; } 2>/dev/null; then
+  while [ -z "$CODE" ]; do
+    printf '\nThis commit is a %s for %s.\n' "$KIND" "$WHEN" > /dev/tty
+    printf 'Are you in class or out of class? Type i for in class, o for out of class: ' > /dev/tty
+    read -r ANSWER <&3 || break
+    ANSWER=$(printf '%s' "$ANSWER" | tr '[:upper:]' '[:lower:]' | tr -d '[:space:]')
+    case "$ANSWER" in
+      i | in | "in class" | inclass | c | class | cw) CODE=CW ;;
+      o | out | "out of class" | outofclass | h | home | hw) CODE=HW ;;
+      *) printf 'Please type i or o.\n' > /dev/tty ;;
+    esac
+  done
+  exec 3<&-
+fi
+
+if [ -z "$CODE" ]; then
+  # No terminal to ask in (for example, a commit from VS Code's Source Control
+  # panel). Leave the choice visible so it cannot slip through by accident.
+  SUBJECT="docs: Add $KIND for $WHEN (CW or HW)"
+  NOTE="# Keep CW if you were in class, HW if you were out of class. Delete the other."
+else
+  SUBJECT="docs: Add $KIND for $WHEN ($CODE)"
+  NOTE="# Written for you from your answer. Save, then close this tab to commit."
+  printf '\n  %s\n\nSave the file, then close the tab to commit.\n\n' "$SUBJECT" > /dev/tty
+fi
+
+# Message on line 1, the template's comments kept underneath for reference.
+# Git drops every line that starts with #.
+{
+  printf '%s\n' "$SUBJECT"
+  printf '%s\n' "$NOTE"
+  cat "$MSG_FILE"
+} > "$MSG_FILE.tmp" && mv "$MSG_FILE.tmp" "$MSG_FILE"

@@ -7,6 +7,10 @@
 # stop using.
 git pull --quiet 2>/dev/null || true
 
+# Turn on the commit helper in .githooks/. When you run `git commit` it asks
+# whether you are in class or out of class and writes the message for you.
+git config core.hooksPath .githooks
+
 FILENAME="logs/$(date +'%Y-%m-%d').log.md"        # one file per day, sortable
 touch "$FILENAME"                                 # create it if it isn't there
 

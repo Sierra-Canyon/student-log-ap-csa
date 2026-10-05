@@ -274,9 +274,27 @@ git commit
 git push
 ```
 
-`git commit` with no `-m` opens the template. Keep the top line under 50
-characters and write it as a command: *Add class entry for M14*, not *added
-class entry*.
+`git commit` with no `-m` asks you one question:
+
+```
+Are you in class or out of class? Type i for in class, o for out of class:
+```
+
+Answer it and the message is written for you, on the first line of the file VS
+Code opens:
+
+```
+docs: Add sign on for Oct 5th (CW)      in class
+docs: Add sign off for Oct 5th (HW)     out of class
+```
+
+Read it, save, and close the tab. Git works out sign on or sign off from what
+you staged, and the date comes from the log file's name. The scripts in
+`scripts/` turn this on for you (`git config core.hooksPath .githooks`).
+
+For any other commit, git opens the normal template and you write the message
+yourself. Keep the top line under 50 characters and write it as a command:
+*Fix reflection answer for Oct 5th*, not *fixed stuff*.
 
 **Push the same day you write.** A week of entries pushed the night before a
 unit test tells me exactly what it looks like, and unlike telling me in the

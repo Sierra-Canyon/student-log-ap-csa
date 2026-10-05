@@ -280,8 +280,8 @@ git push
 Are you in class or out of class? Type i for in class, o for out of class:
 ```
 
-Answer it and the message is written for you, on the first line of the file VS
-Code opens:
+Answer it and the message is written for you, on line 3 of the file VS Code
+opens, where you would have typed it:
 
 ```
 docs: Add sign on for Oct 5th (CW)      in class

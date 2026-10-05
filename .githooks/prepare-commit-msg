@@ -3,7 +3,7 @@
 #
 # Git runs this every time you type `git commit` (no -m). It looks at the log
 # you staged, works out whether it is a sign on or a sign off, asks you one
-# question, and puts the finished message on the first line of the editor.
+# question, and types the finished message on line 3, where you would.
 # You still get to read it: save, close the tab, and the commit is made.
 #
 # It stays out of the way when:
@@ -76,21 +76,28 @@ if { exec 3</dev/tty; } 2>/dev/null; then
   exec 3<&-
 fi
 
+NOTE=""
 if [ -z "$CODE" ]; then
-  # No terminal to ask in (for example, a commit from VS Code's Source Control
-  # panel). Leave the choice visible so it cannot slip through by accident.
+  # No terminal to ask in. Leave the choice visible so it cannot slip through
+  # by accident.
   SUBJECT="docs: Add $KIND for $WHEN (CW or HW)"
   NOTE="# Keep CW if you were in class, HW if you were out of class. Delete the other."
 else
   SUBJECT="docs: Add $KIND for $WHEN ($CODE)"
-  NOTE="# Written for you from your answer. Save, then close this tab to commit."
   printf '\n  %s\n\nSave the file, then close the tab to commit.\n\n' "$SUBJECT" > /dev/tty
 fi
 
-# Message on line 1, the template's comments kept underneath for reference.
+# Put the message where you would type it yourself: on the first blank line
+# after the template's opening comments (line 3). Everything else is untouched.
 # Git drops every line that starts with #.
-{
-  printf '%s\n' "$SUBJECT"
-  printf '%s\n' "$NOTE"
-  cat "$MSG_FILE"
-} > "$MSG_FILE.tmp" && mv "$MSG_FILE.tmp" "$MSG_FILE"
+awk -v subject="$SUBJECT" -v note="$NOTE" '
+  !done && /^#/ { print; next }
+  !done {
+    print subject
+    if (note != "") print note
+    done = 1
+    if ($0 == "") next
+  }
+  { print }
+  END { if (!done) { print subject; if (note != "") print note } }
+' "$MSG_FILE" > "$MSG_FILE.tmp" && mv "$MSG_FILE.tmp" "$MSG_FILE"
